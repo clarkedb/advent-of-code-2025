@@ -13,5 +13,8 @@ run-binary: build
 test:
 	go test ./solutions/...
 
+gen:
+	go run cmd/gen/main.go -day $(DAY)
+
 clean:
 	rm -f bin/aoc
