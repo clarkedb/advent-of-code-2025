@@ -11,8 +11,9 @@ import (
 const solutionTemplate = `package solutions
 
 import (
+	"bufio"
 	"fmt"
-	"strings"
+	"io"
 )
 
 func init() {
@@ -20,22 +21,39 @@ func init() {
 	Register({{.Day}}, 2, day{{.DayPadded}}Part2)
 }
 
-func day{{.DayPadded}}Part1(input string) (string, error) {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+func day{{.DayPadded}}Part1(input io.Reader) (string, error) {
+	var lines int
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		lines++
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
 	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", len(lines)), nil
+	return fmt.Sprintf("processed %d lines", lines), nil
 }
 
-func day{{.DayPadded}}Part2(input string) (string, error) {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+func day{{.DayPadded}}Part2(input io.Reader) (string, error) {
+	var lines int
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		lines++
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
 	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", len(lines)), nil
+	return fmt.Sprintf("processed %d lines", lines), nil
 }
 `
 
 const testTemplate = `package solutions
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestDay{{.DayPadded}}Part1(t *testing.T) {
 	tests := []struct {
@@ -52,7 +70,7 @@ func TestDay{{.DayPadded}}Part1(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := day{{.DayPadded}}Part1(tt.input)
+			got, err := day{{.DayPadded}}Part1(strings.NewReader(tt.input))
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -78,7 +96,7 @@ func TestDay{{.DayPadded}}Part2(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := day{{.DayPadded}}Part2(tt.input)
+			got, err := day{{.DayPadded}}Part2(strings.NewReader(tt.input))
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}

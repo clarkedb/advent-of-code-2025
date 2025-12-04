@@ -1,6 +1,9 @@
 package solutions
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestDay01Part1(t *testing.T) {
 	tests := []struct {
@@ -17,7 +20,7 @@ func TestDay01Part1(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := day01Part1(tt.input)
+			got, err := day01Part1(strings.NewReader(tt.input))
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -43,7 +46,7 @@ func TestDay01Part2(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := day01Part2(tt.input)
+			got, err := day01Part2(strings.NewReader(tt.input))
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -53,4 +56,3 @@ func TestDay01Part2(t *testing.T) {
 		})
 	}
 }
-

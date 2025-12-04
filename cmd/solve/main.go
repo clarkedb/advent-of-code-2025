@@ -29,11 +29,12 @@ func main() {
 		*inputPath = fmt.Sprintf("input/day%02d.txt", *day)
 	}
 
-	input, err := os.ReadFile(*inputPath)
+	input, err := os.Open(*inputPath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error opening input file: %v\n", err)
 		os.Exit(1)
 	}
+	defer input.Close()
 
 	solver, ok := solutions.Get(*day, *part)
 	if !ok {
@@ -42,7 +43,7 @@ func main() {
 	}
 
 	start := time.Now()
-	result, err := solver(string(input))
+	result, err := solver(input)
 	duration := time.Since(start)
 
 	if err != nil {

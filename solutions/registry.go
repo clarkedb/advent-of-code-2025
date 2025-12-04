@@ -1,8 +1,11 @@
 package solutions
 
+import "io"
+
 // Solver is the function signature for all day/part solutions.
-// It takes the input as a string and returns the result as a string.
-type Solver func(input string) (string, error)
+// It takes the input as an io.Reader, allowing solvers to read
+// line-by-line with bufio.Scanner or read all with io.ReadAll.
+type Solver func(input io.Reader) (string, error)
 
 // registry holds all registered solutions indexed by day and part.
 var registry = make(map[int]map[int]Solver)
