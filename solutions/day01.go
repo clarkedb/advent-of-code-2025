@@ -1,8 +1,9 @@
 package solutions
 
 import (
+	"bufio"
 	"fmt"
-	"strings"
+	"io"
 )
 
 func init() {
@@ -10,14 +11,28 @@ func init() {
 	Register(1, 2, day01Part2)
 }
 
-func day01Part1(input string) (string, error) {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+func day01Part1(input io.Reader) (string, error) {
+	var lines int
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		lines++
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
 	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", len(lines)), nil
+	return fmt.Sprintf("processed %d lines", lines), nil
 }
 
-func day01Part2(input string) (string, error) {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+func day01Part2(input io.Reader) (string, error) {
+	var lines int
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		lines++
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
 	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", len(lines)), nil
+	return fmt.Sprintf("processed %d lines", lines), nil
 }
