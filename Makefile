@@ -2,10 +2,10 @@ DAY ?= 1
 PART ?= 1
 
 build:
-	go build -o bin/aoc .
+	go build -o bin/aoc ./cmd/solve
 
 run:
-	go run main.go -day $(DAY) -part $(PART)
+	go run ./cmd/solve -day $(DAY) -part $(PART)
 
 run-binary: build
 	bin/aoc -day $(DAY) -part $(PART)
