@@ -13,8 +13,8 @@ func TestDay01Part1(t *testing.T) {
 	}{
 		{
 			name:  "example",
-			input: "line1\nline2",
-			want:  "processed 2 lines",
+			input: "L68\nL30\nR48\nL5\nR60\nL55\nL1\nL99\nR14\nL82",
+			want:  "3",
 		},
 	}
 
@@ -39,8 +39,28 @@ func TestDay01Part2(t *testing.T) {
 	}{
 		{
 			name:  "example",
-			input: "line1\nline2",
-			want:  "processed 2 lines",
+			input: "L68\nL30\nR48\nL5\nR60\nL55\nL1\nL99\nR14\nL82",
+			want:  "6",
+		},
+		{
+			name:  "multiple crossing example",
+			input: "R1000",
+			want:  "10",
+		},
+		{
+			name:  "exact left crossing edge case",
+			input: "L150",
+			want:  "2",
+		},
+		{
+			name:  "exact left zero case",
+			input: "L50",
+			want:  "1",
+		},
+		{
+			name:  "toggle zero crossing",
+			input: "L50\nR50\nL50\nR50\nL50",
+			want:  "3",
 		},
 	}
 
