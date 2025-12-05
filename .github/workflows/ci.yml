@@ -35,5 +35,8 @@ jobs:
               with:
                   go-version: "1.24"
 
-            - name: Test
+            - name: Test solutions
               run: go test ./solutions/...
+
+            - name: Test internal
+              run: go test ./internal/...
