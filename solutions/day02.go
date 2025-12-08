@@ -16,7 +16,7 @@ func init() {
 }
 
 func day02Part1(input io.Reader) (string, error) {
-	entries := make([][2]int, 0)
+	var invalidIDSum int
 	scanner := bufio.NewScanner(input)
 	scanner.Split(iio.ScanCommas)
 	for scanner.Scan() {
@@ -24,21 +24,25 @@ func day02Part1(input io.Reader) (string, error) {
 		if len(idRange) != 2 {
 			return "", fmt.Errorf("invalid range: %q", scanner.Text())
 		}
-		rangeStart, err := strconv.Atoi(idRange[0])
+		rangeStart, err := strconv.Atoi(strings.TrimSpace(idRange[0]))
 		if err != nil {
 			return "", fmt.Errorf("invalid range start: %q", idRange[0])
 		}
-		rangeEnd, err := strconv.Atoi(idRange[1])
+		rangeEnd, err := strconv.Atoi(strings.TrimSpace(idRange[1]))
 		if err != nil {
 			return "", fmt.Errorf("invalid range end: %q", idRange[1])
 		}
-		entries = append(entries, [2]int{rangeStart, rangeEnd})
+
+		for id := rangeStart; id <= rangeEnd; id++ {
+			if isRepeatingSequence(fmt.Sprintf("%d", id)) {
+				invalidIDSum += id
+			}
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
-	// TODO: implement solution
-	return fmt.Sprintf("%v", entries), nil
+	return fmt.Sprintf("%v", invalidIDSum), nil
 }
 
 func day02Part2(input io.Reader) (string, error) {
@@ -52,4 +56,19 @@ func day02Part2(input io.Reader) (string, error) {
 	}
 	// TODO: implement solution
 	return fmt.Sprintf("processed %d lines", lines), nil
+}
+
+func isRepeatingSequence(s string) bool {
+	if len(s)%2 != 0 || len(s) < 2 {
+		return false
+	}
+
+	mid := len(s) / 2
+	for i := range mid {
+		if s[i] != s[mid+i] {
+			return false
+		}
+	}
+
+	return true
 }
