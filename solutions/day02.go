@@ -34,7 +34,7 @@ func day02Part1(input io.Reader) (string, error) {
 		}
 
 		for id := rangeStart; id <= rangeEnd; id++ {
-			if isRepeatingSequenceInt(id) {
+			if isRepeatingSquenceTwice(id) {
 				invalidIDSum += id
 			}
 		}
@@ -46,19 +46,40 @@ func day02Part1(input io.Reader) (string, error) {
 }
 
 func day02Part2(input io.Reader) (string, error) {
-	var lines int
+	var invalidIDSum int
 	scanner := bufio.NewScanner(input)
+	scanner.Split(iio.ScanCommas)
 	for scanner.Scan() {
-		lines++
+		idRange := strings.Split(scanner.Text(), "-")
+		if len(idRange) != 2 {
+			return "", fmt.Errorf("invalid range: %q", scanner.Text())
+		}
+		rangeStart, err := strconv.Atoi(strings.TrimSpace(idRange[0]))
+		if err != nil {
+			return "", fmt.Errorf("invalid range start: %q", idRange[0])
+		}
+		rangeEnd, err := strconv.Atoi(strings.TrimSpace(idRange[1]))
+		if err != nil {
+			return "", fmt.Errorf("invalid range end: %q", idRange[1])
+		}
+
+		for id := rangeStart; id <= rangeEnd; id++ {
+			if isRepeatingSequence(id) {
+				invalidIDSum += id
+			}
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
-	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", lines), nil
+	return fmt.Sprintf("%v", invalidIDSum), nil
 }
 
-func isRepeatingSequenceInt(n int) bool {
+func isRepeatingSquenceTwice(n int) bool {
+	if n < 11 {
+		return false
+	}
+
 	digits := make([]int, 0, 10)
 	pos := n
 	for pos > 0 {
@@ -71,7 +92,7 @@ func isRepeatingSequenceInt(n int) bool {
 		digits[i], digits[j] = digits[j], digits[i]
 	}
 
-	if len(digits)%2 != 0 || len(digits) < 2 {
+	if len(digits)%2 != 0 {
 		return false
 	}
 
@@ -81,5 +102,27 @@ func isRepeatingSequenceInt(n int) bool {
 			return false
 		}
 	}
+	return true
+}
+
+func isRepeatingSequence(n int) bool {
+	if n < 11 {
+		return false
+	}
+
+	digits := make([]int, 0, 10)
+	pos := n
+	for pos > 0 {
+		digits = append(digits, pos%10)
+		pos /= 10
+	}
+
+	// reverse to get correct order
+	for i, j := 0, len(digits)-1; i < j; i, j = i+1, j-1 {
+		digits[i], digits[j] = digits[j], digits[i]
+	}
+
+	// TODO: check for repeating sequences of any length
+
 	return true
 }
