@@ -34,7 +34,7 @@ func day02Part1(input io.Reader) (string, error) {
 		}
 
 		for id := rangeStart; id <= rangeEnd; id++ {
-			if isRepeatingSequence(fmt.Sprintf("%d", id)) {
+			if isRepeatingSequenceInt(id) {
 				invalidIDSum += id
 			}
 		}
@@ -58,17 +58,28 @@ func day02Part2(input io.Reader) (string, error) {
 	return fmt.Sprintf("processed %d lines", lines), nil
 }
 
-func isRepeatingSequence(s string) bool {
-	if len(s)%2 != 0 || len(s) < 2 {
+func isRepeatingSequenceInt(n int) bool {
+	digits := make([]int, 0, 10)
+	pos := n
+	for pos > 0 {
+		digits = append(digits, pos%10)
+		pos /= 10
+	}
+
+	// reverse to get correct order
+	for i, j := 0, len(digits)-1; i < j; i, j = i+1, j-1 {
+		digits[i], digits[j] = digits[j], digits[i]
+	}
+
+	if len(digits)%2 != 0 || len(digits) < 2 {
 		return false
 	}
 
-	mid := len(s) / 2
+	mid := len(digits) / 2
 	for i := range mid {
-		if s[i] != s[mid+i] {
+		if digits[i] != digits[mid+i] {
 			return false
 		}
 	}
-
 	return true
 }
