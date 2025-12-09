@@ -75,13 +75,9 @@ func day02Part2(input io.Reader) (string, error) {
 	return fmt.Sprintf("%v", invalidIDSum), nil
 }
 
-func isRepeatingSquenceTwice(n int) bool {
-	if n < 11 {
-		return false
-	}
-
+func digitsFromInteger(z int) []int {
 	digits := make([]int, 0, 10)
-	pos := n
+	pos := z
 	for pos > 0 {
 		digits = append(digits, pos%10)
 		pos /= 10
@@ -91,38 +87,48 @@ func isRepeatingSquenceTwice(n int) bool {
 	for i, j := 0, len(digits)-1; i < j; i, j = i+1, j-1 {
 		digits[i], digits[j] = digits[j], digits[i]
 	}
-
-	if len(digits)%2 != 0 {
-		return false
-	}
-
-	mid := len(digits) / 2
-	for i := range mid {
-		if digits[i] != digits[mid+i] {
-			return false
-		}
-	}
-	return true
+	return digits
 }
 
-func isRepeatingSequence(n int) bool {
-	if n < 11 {
+func isRepeatingSquenceTwice(z int) bool {
+	if z < 11 {
 		return false
 	}
 
-	digits := make([]int, 0, 10)
-	pos := n
-	for pos > 0 {
-		digits = append(digits, pos%10)
-		pos /= 10
+	digits := digitsFromInteger(z)
+	return containsNRepeatedSubSequences(digits, 2)
+}
+
+func isRepeatingSequence(z int) bool {
+	if z < 11 {
+		return false
 	}
 
-	// reverse to get correct order
-	for i, j := 0, len(digits)-1; i < j; i, j = i+1, j-1 {
-		digits[i], digits[j] = digits[j], digits[i]
+	digits := digitsFromInteger(z)
+
+	for n := 2; n <= len(digits); n++ {
+		if containsNRepeatedSubSequences(digits, n) {
+			return true
+		}
+	}
+	return false
+}
+
+func containsNRepeatedSubSequences[T comparable](seq []T, n int) bool {
+	m := len(seq)
+	if n > m || n < 1 || m%n != 0 {
+		return false
 	}
 
-	// TODO: check for repeating sequences of any length
+	subSeqLen := m / n
+	for i := range subSeqLen {
+		v := seq[i]
+		for j := 1; j < n; j++ {
+			if seq[i+j*subSeqLen] != v {
+				return false
+			}
+		}
+	}
 
 	return true
 }
