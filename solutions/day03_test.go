@@ -39,8 +39,8 @@ func TestDay03Part2(t *testing.T) {
 	}{
 		{
 			name:  "example",
-			input: "line1\nline2",
-			want:  "processed 2 lines",
+			input: "987654321111111\n811111111111119\n234234234234278\n818181911112111",
+			want:  "3121910778619",
 		},
 	}
 

@@ -17,7 +17,7 @@ func day03Part1(input io.Reader) (string, error) {
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		cell := scanner.Text()
-		max, err := maxTwoDigitSubstring(cell)
+		max, err := maxNDigitSubstring(cell, 2)
 		if err != nil {
 			return "", err
 		}
@@ -30,34 +30,60 @@ func day03Part1(input io.Reader) (string, error) {
 }
 
 func day03Part2(input io.Reader) (string, error) {
-	var lines int
+	var sum int
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
-		lines++
+		cell := scanner.Text()
+		max, err := maxNDigitSubstring(cell, 12)
+		if err != nil {
+			return "", err
+		}
+		sum += max
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
-	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", lines), nil
+	return fmt.Sprintf("%d", sum), nil
 }
 
-func maxTwoDigitSubstring(s string) (int, error) {
-	n := len(s)
-	var max int
-
-	for i := range n {
-		for j := i + 1; j < n; j++ {
-			v, err := strconv.Atoi(fmt.Sprintf("%c%c", s[i], s[j]))
-			if err != nil {
-				return 0, err
-			}
-
-			if v > max {
-				max = v
-			}
-		}
+func maxNDigitSubstring(s string, n int) (int, error) {
+	if len(s) < n {
+		return 0, nil
 	}
 
-	return max, nil
+	// greedy approach: build the largest n-digit number
+	result := make([]byte, n)
+	digitIndex := 0
+
+	for pos := range n {
+		// find the largest digit we can use at this position
+		// while ensuring we have enough digits left for remaining positions
+		maxDigit := byte('0')
+		maxDigitIndex := -1
+
+		// Look ahead: we need (n - pos - 1) more digits after this one
+		remainingPositions := n - pos - 1
+
+		for i := digitIndex; i <= len(s)-1-remainingPositions; i++ {
+			if s[i] > maxDigit {
+				maxDigit = s[i]
+				maxDigitIndex = i
+			}
+		}
+
+		if maxDigitIndex == -1 {
+			// This shouldn't happen if our logic is correct
+			return 0, fmt.Errorf("failed to find digit at position %d", pos)
+		}
+
+		result[pos] = maxDigit
+		digitIndex = maxDigitIndex + 1
+	}
+
+	val, err := strconv.Atoi(string(result))
+	if err != nil {
+		return 0, err
+	}
+
+	return val, nil
 }
