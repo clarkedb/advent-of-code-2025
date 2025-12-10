@@ -61,7 +61,7 @@ func maxNDigitSubstring(s string, n int) (int, error) {
 		maxDigit := byte('0')
 		maxDigitIndex := -1
 
-		// Look ahead: we need (n - pos - 1) more digits after this one
+		// look ahead: we need (n - pos - 1) more digits after this one
 		remainingPositions := n - pos - 1
 
 		for i := digitIndex; i <= len(s)-1-remainingPositions; i++ {
@@ -72,7 +72,6 @@ func maxNDigitSubstring(s string, n int) (int, error) {
 		}
 
 		if maxDigitIndex == -1 {
-			// This shouldn't happen if our logic is correct
 			return 0, fmt.Errorf("failed to find digit at position %d", pos)
 		}
 
