@@ -90,10 +90,9 @@ func day04Part2(input io.Reader) (string, error) {
 	}
 
 	count := 0
-	prevCount := -1
 
-	for iter := 1; count != prevCount; iter++ {
-		prevCount = count
+	for iter := 1; ; iter++ {
+		added := 0
 		for r := range n {
 			for c := range m {
 				if grid[r][c] != 0 && grid[r][c] <= iter {
@@ -112,11 +111,17 @@ func day04Part2(input io.Reader) (string, error) {
 				}
 
 				if neighbors < 4 {
-					count++
+					added++
 					grid[r][c] = iter + 1
 				}
 			}
 		}
+
+		if added == 0 {
+			break
+		}
+
+		count += added
 	}
 
 	return fmt.Sprintf("%d", count), nil
