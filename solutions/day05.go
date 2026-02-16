@@ -43,8 +43,17 @@ func day05Part1(input io.Reader) (string, error) {
 		return "", err
 	}
 
-	// TODO: implement solution
-	return fmt.Sprintf("processed %d ranges and %d ids", len(ranges), len(ids)), nil
+	count := 0
+	for _, id := range ids {
+		for _, r := range ranges {
+			if id >= r[0] && id <= r[1] {
+				count++
+				break
+			}
+		}
+	}
+
+	return fmt.Sprintf("%d", count), nil
 }
 
 func day05Part2(input io.Reader) (string, error) {
