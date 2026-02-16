@@ -78,26 +78,24 @@ func day05Part2(input io.Reader) (string, error) {
 	}
 
 	slices.SortFunc(ranges, func(a, b [2]int) int { return a[0] - b[0] })
-	mergedRanges := make([][2]int, 0, len(ranges))
 
-	for {
-		a := ranges[0]
-		if len(ranges) == 1 {
-			mergedRanges = append(mergedRanges, a)
-			break
+	merged := make([][2]int, 0, len(ranges))
+	for _, r := range ranges {
+		if len(merged) == 0 {
+			merged = append(merged, r)
+			continue
 		}
 
-		b := ranges[1]
-		if b[0] > a[1] {
-			mergedRanges = append(mergedRanges, a)
-		} else {
-			ranges[1] = [2]int{a[0], max(a[1], b[1])}
+		m := merged[len(merged)-1]
+		if r[0] > m[1] {
+			merged = append(merged, r)
+		} else if r[1] > m[1] {
+			merged[len(merged)-1][1] = r[1]
 		}
-		ranges = ranges[1:]
 	}
 
 	count := 0
-	for _, r := range mergedRanges {
+	for _, r := range merged {
 		count += r[1] - r[0] + 1
 	}
 
