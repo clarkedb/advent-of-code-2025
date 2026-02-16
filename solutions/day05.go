@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"slices"
 	"strconv"
 )
 
@@ -57,14 +58,48 @@ func day05Part1(input io.Reader) (string, error) {
 }
 
 func day05Part2(input io.Reader) (string, error) {
-	var lines int
 	scanner := bufio.NewScanner(input)
+	ranges := make([][2]int, 0)
 	for scanner.Scan() {
-		lines++
+		line := scanner.Text()
+		if len(line) == 0 {
+			break
+		}
+
+		var a, b int
+		_, err := fmt.Sscanf(line, "%d-%d", &a, &b)
+		if err != nil {
+			return "", fmt.Errorf("error reading range: %w", err)
+		}
+		ranges = append(ranges, [2]int{a, b})
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
-	// TODO: implement solution
-	return fmt.Sprintf("processed %d lines", lines), nil
+
+	slices.SortFunc(ranges, func(a, b [2]int) int { return a[0] - b[0] })
+	mergedRanges := make([][2]int, 0, len(ranges))
+
+	for {
+		a := ranges[0]
+		if len(ranges) == 1 {
+			mergedRanges = append(mergedRanges, a)
+			break
+		}
+
+		b := ranges[1]
+		if b[0] > a[1] {
+			mergedRanges = append(mergedRanges, a)
+		} else {
+			ranges[1] = [2]int{a[0], max(a[1], b[1])}
+		}
+		ranges = ranges[1:]
+	}
+
+	count := 0
+	for _, r := range mergedRanges {
+		count += r[1] - r[0] + 1
+	}
+
+	return fmt.Sprintf("%d", count), nil
 }

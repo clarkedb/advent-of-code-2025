@@ -39,8 +39,8 @@ func TestDay05Part2(t *testing.T) {
 	}{
 		{
 			name:  "example",
-			input: "line1\nline2",
-			want:  "processed 2 lines",
+			input: "3-5\n10-14\n16-20\n12-18\n\n1\n5\n8\n11\n17\n32",
+			want:  "14",
 		},
 	}
 
